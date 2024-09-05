@@ -84,4 +84,11 @@ if (( $(ps -ef | awk '{ print $8 }' | grep mysqld | wc -l) > 0 ))
   register: result
 ```  
 
+```
+My filters Extension ublockorgin
+##.videowall-endscreen
+youtube.com##.html5-endscreen-content
+youtube.com##.html5-endscreen
+youtube.com##.ytp-ce-element
+```
 
