@@ -62,7 +62,7 @@ Run this command, to get the password for the admin user of the Grafana dashboar
 
 `kubectl get secret --namespace default kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo`
 
-- Install kubectl metric API: kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+- Install kubectl metric API: `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
 
 - Fix tls metric API:
 
@@ -76,7 +76,7 @@ add line:
 kubectl rollout restart deployment metrics-server -n kube-system
 ```
 
-- Import dashboard: Dashboard --> New --> Import --> Find and import dashboards for common applications at https://grafana.com/grafana/dashboards/ ( Input 6417 and click load)
+- Import dashboard: `Dashboard --> New --> Import --> Find and import dashboards for common applications at https://grafana.com/grafana/dashboards/ ( Input 6417 and click load)`
 
 - Fix logs warning:
 ```

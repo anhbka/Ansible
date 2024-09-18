@@ -1,6 +1,4 @@
-### Create repo offline with DVD for Centos 7/Rhel 7:
-
-* Centos 7
+### 1. Create repo offline with DVD for Centos 7:
 
 - Mount the CD/DVD ROM on any directory of your wish.
 ```
@@ -22,7 +20,7 @@ yum clean all
 yum repolist
 ```
 
-### Create repo offline with DVD for Rhel 7
+### 2. Create repo offline with DVD for Rhel 7
 
 ```
 mount -o loop /dev/sr0 /mnt
@@ -52,7 +50,7 @@ yum repolist enabled
 yum update
 ```
 
-### Create repo offline with DVD for Rhel 8
+### 3. Create repo offline with DVD for Rhel 8
 
 Mount the downloaded RHEL installation ISO to a directory like /mnt:
 
@@ -80,7 +78,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
 [dvd-AppStream]
 name=DVD for RHEL - AppStream/
-baseurl=file:///mnt/AppStream
+baseurl=file:///mnt/AppStream/
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
@@ -92,7 +90,7 @@ yum  --noplugins list
 
 ```
 
-### Create repo offline with DVD for Rhel 9:
+### 4. Create repo offline with DVD for Rhel 9:
 
 ```
 Mount the RHEL Binary DVD ISO to a directory such as /mnt, e.g.:
@@ -127,7 +125,7 @@ yum repolist
 
 ```
 
-### Update repo online for Centos 7:
+### 5. Update repo online for Centos 7:
 
 ```
 sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
