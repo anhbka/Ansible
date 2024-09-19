@@ -60,7 +60,7 @@ kubectl get nodes -o wide
 
 Run this command, to get the password for the admin user of the Grafana dashboard:
 
-`kubectl get secret --namespace default kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo`
+`kubectl get secret --namespace default my-kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo`
 
 - Install kubectl metric API: `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
 

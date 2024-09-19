@@ -7,15 +7,14 @@ mount -o loop /dev/sr0 /mnt
 * Note: The Warning mount: /mnt/disc: WARNING: source write-protected, mounted read-only. is expected.
 
 mv /etc/yum.repos.d/*.repo /tmp/
-vi /etc/yum.repos.d/local.repo
-
+cat <<\EOF > /etc/yum.repos.d/local.repo
 [LocalRepo]
 name=LocalRepository
 baseurl=file:///mnt
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-
+EOF
 yum clean all
 yum repolist
 ```
@@ -32,7 +31,7 @@ chmod 644 /etc/yum.repos.d/rhel7dvd.repo
 
 Edit the new repo file, changing the gpgcheck=0 setting to 1 and adding the following 3 lines:
 
-vi /etc/yum.repos.d/rhel7dvd.repo
+cat <<\EOF > /etc/yum.repos.d/rhel7dvd.repo
 [InstallMedia]
 name=DVD for Red Hat Enterprise Linux 7.9 Server
 mediaid=1359576196.686790
@@ -42,6 +41,7 @@ cost=500
 enabled=1
 baseurl=file:///mnt/
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+EOF
 
 Clear the cache and check whether you can get the packages list from the DVD repo:
 
@@ -83,6 +83,7 @@ enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 EOF
+
 Check whether you can get the packages list from the DVD repositories.
 
 yum clean all
@@ -101,7 +102,7 @@ mount -o loop rhel-baseos-9.0-x86_64-dvd.iso /mnt
 mount /dev/sr0  /mnt
 * Note: The Warning mount: /mnt/disc: WARNING: source write-protected, mounted read-only. is expected.
 
-vi /etc/yum.repos.d/rhel9dvd.repo 
+cat <<\EOF > /etc/yum.repos.d/rhel9dvd.repo 
 [BaseOS]
 name=BaseOS Packages Red Hat Enterprise Linux 9
 metadata_expire=-1
@@ -117,6 +118,7 @@ gpgcheck=1
 enabled=1
 baseurl=file:///mnt/AppStream/
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+EOF
 
 - Clear the cache and check whether you are able to get the packages from this DVD repository:
 
