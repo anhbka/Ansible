@@ -60,7 +60,8 @@ sudo cp -R * /usr/share/figlet
 
 ### 2. Toilet
 
-`yum install toilet -y
+```
+yum install toilet -y
 
 while true; do echo "$(date '+%D %T' | toilet -f term -F border --gay)"; sleep 1; done
 ```
