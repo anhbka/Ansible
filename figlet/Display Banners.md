@@ -1,4 +1,4 @@
-### How to Display Banners in Linux Command Lin
+### How to Display Banners in Linux Command Linux
 
 ### 1. Banner
 
@@ -48,7 +48,7 @@
 
 ### Custom Fonts
 
-Extra fonts are available for download from ftp://ftp.figlet.org/pub/figlet/fonts/. For more information about figlet, read figlet’s man page and visit http://www.figlet.org/. As of the time of this writing, the font database was unaccessible, but fonts can still be downloaded from the ftp site.
+Extra fonts are available for download from `ftp://ftp.figlet.org/pub/figlet/fonts/`. For more information about figlet, read figlet’s man page and visit `http://www.figlet.org/`. As of the time of this writing, the font database was unaccessible, but fonts can still be downloaded from the ftp site.
 
 ```
 contributed.tar.gz      - Recommended. About 138 new fonts for figlet.
@@ -78,9 +78,13 @@ toilet -f smblock --filter border:metal:flip:flop 'Linux is fun'
 toilet -f smblock --filter border:metal: 'Linux is fun'
 toilet -f slant --filter border:metal 'SDSVN'
 toilet -f slant --filter border:metal 'WELCOME TO SAMSUNG SDS VIETNAM'
-```
+
 
 https://tuxfixer.com/how-to-display-banners-in-linux-command-line/
+
 https://delightlylinux.wordpress.com/2015/11/13/colored-text-with-toilet/
+
 https://delightlylinux.wordpress.com/2014/05/30/produce-fancy-text-with-figlet/
+
 https://www.linux.com/training-tutorials/linux-tips-fun-figlet-and-toilet-commands/
+```
