@@ -9,7 +9,6 @@ grep mysqld: lấy ra những dòng có chữ mysqld
 wc -l: đếm số dòng có chữ mysqld
 
 ```
-
 ```
 #!/bin/bash
 service=mysqld
@@ -23,7 +22,6 @@ if (( $(ps -ef | awk '{ print $8 }' | grep mysqld | wc -l) > 0 ))
 ```
 
 */5 * * * * sh /var/www/script/
-
 
 ```
  name: install the latest version of Apache
@@ -91,4 +89,3 @@ youtube.com##.html5-endscreen-content
 youtube.com##.html5-endscreen
 youtube.com##.ytp-ce-element
 ```
-
