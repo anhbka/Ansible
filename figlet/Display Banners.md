@@ -58,10 +58,10 @@ ours.tar.gz             - The default fonts already included with figlet.
 sudo cp -R * /usr/share/figlet 
 ``` 
 
-### 2. Toilet
+### 2. Toilet, cowsay
 
 ```
-yum install toilet -y
+yum install toilet cowsay -y
 
 while true; do echo "$(date '+%D %T' | toilet -f term -F border --gay)"; sleep 1; done
 ```
@@ -88,3 +88,4 @@ https://delightlylinux.wordpress.com/2014/05/30/produce-fancy-text-with-figlet/
 
 https://www.linux.com/training-tutorials/linux-tips-fun-figlet-and-toilet-commands/
 ```
+`cowsay -f dragon "Run for cover, I feel a sneeze coming on."`

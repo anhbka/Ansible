@@ -144,7 +144,7 @@ http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/
 https://mirror.cs.princeton.edu/pub/mirrors/centos/7.9.2009/
 http://mirrors.viettelidc.com.vn/centos/7/
 
-cat <<\EOF > /etc/yum.repos.d/repovietnam.repo
+cat <<\EOF > /etc/yum.repos.d/CentOS-Base.repo
 [base]
 name=CentOS-$releasever - Base
 baseurl=http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/os/$basearch/

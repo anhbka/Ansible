@@ -19,7 +19,7 @@ https://mirror.nsc.liu.se/centos-store/centos/7.9.2009/
 http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/
 https://mirror.cs.princeton.edu/pub/mirrors/centos/7.9.2009/
 
-
+cat <<\EOF > /etc/yum.repo.d/CentOS-Base.repo
 [base]
 name=CentOS-$releasever - Base
 baseurl=http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/os/$basearch/
@@ -51,4 +51,5 @@ baseurl=http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/contrib/$basearch/
 gpgcheck=1
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+EOF
 ```
