@@ -1,7 +1,7 @@
 <h3>1.	Vai trò của project Cinder</h3>
 <p>		Cinder là dịch vụ Block Storage trong Openstack. Nó được thiết kế để người dùng cuối có thể thực hiện việc lưu trữ bởi Nova, việc này được thực hiện bởi LVM hoặc các plugin driver cho các nền tảng lưu trữ khác. Cinder ảo hóa việc quản lý các thiết bị block storage và cung cấp cho người dùng cuối một API đáp ứng được nhu cầu tự phục vụ cũng như tiêu thụ các tài nguyên đó mà không cần biết quá nhiều kiến thức chuyên sâu.</p>
 <h3> 2.	Kiến trúc và cơ chế hoạt động của Cinder </h3>
-<img src="https://github.com/anhict/images/blob/master/11.png?raw=true">
+<img src="/img/11.png?raw=true">
 <p>- Cinder-api : Xác thực và định tuyến các yêu cầu xuyên suốt dịch vụ Cinder. </p>
 <p>- Cinder-scheduler : Lên lịch và định tuyến các yêu cầu tới dịch vụ volume thích hợp. Tùy thuộc vào cách cấu hình, có thể chỉ là dùng round-robin để định ra việc sẽ dùng volume service nào, hoặc có thể phức tạp hơn bằng cách dùng Filter Scheduler. Filter Scheduler là mặc định và bật các bộ lọc như Capacity, Avaibility Zone, Volume Type, và Capability. </p>
 <p> Cinder-volume : Quản lý thiết bị block storage, đặc biệt là các thiết bị back-end </p>
@@ -36,11 +36,11 @@
 <p>o	Volume snapshot (tạo một volume mới) : Tạo một volume từ volume snapshot đã chọn và boot máy ảo từ đó.</p></ul>
 <h3> 5.	Luồng làm việc của Cinder </h3>
 <h4> 5.1 Workflow của Cinder khi tạo mới Volume </h4>
-<img src="https://github.com/anhict/images/blob/master/12.png?raw=true">
+<img src="/img/12.png?raw=true">
 
 
 <p>Hình bên trên mô tả quy trình tạo Volume , tiếp theo chúng ta cùng đến với quy trình tạo ra volume mới của Cinder :</p>
-<img src="https://github.com/anhict/images/blob/master/14.png?raw=true">
+<img src="/img/14.png?raw=true">
 <p>1.	Client yêu cầu tạo ra Volume thông qua việc gọi REST API (Client cũng có thể sử dụng tiện ích CLI của python-client)</p>
 <p>2.	Cinder-api : Quá trình xác nhận hợp lệ yêu cầu thông tin người dùng , một khi được xác nhận một message được gửi lên hàng chờ AMQP để xử lý.</p>
 <p>3.	Cinder-volume thực hiện quá trình đưa message ra khỏi hàng đợi , gửi thông báo tới cinder-scheduler để báo cáo xác định backend cung cấp volume.</p>
@@ -51,7 +51,7 @@
 <p>8.	Cinder-api thực hiện quá trình đọc message phản hồi từ hàng đợi và đáp ứng tới client.</p>
 <p>9.	Client nhận được thông tin bao gồm trạng thái của yêu cầu tạo, Volume UUID, ....</p>
 <h4>5.2 Workflow của Cinder khi attact Volume </h4>
-<img src="https://github.com/anhict/images/blob/master/15.png?raw=true">
+<img src="/img/15.png?raw=true">
 <p>1.	Client yêu cầu attach volume thông qua Nova REST API (Client có thể sử dụng tiện ích CLI của python-novaclient)</p>
 <p>2.	Nova-api thực hiện quá trình xác nhận yêu cầu và thông tin người dùng. Một khi đã được xác thực, gọi API Cinder để có được thông tin kết nối cho volume được xác định.</p>
 <p>3.	Cinder-api thực hiện quá trình xác nhận yêu cầu hợp lệ và thông tin người dùng hợp lệ . Một khi được xác nhận , một message sẽ được gửi đến người quản lý volume thông qua AMQP.</p>

@@ -1,5 +1,5 @@
 <h3>1. Giới thiệu về migrate trong Openstack </h3>
-<img src="https://github.com/anhict/images/blob/master/migration-1.png">
+<img src="/img/migration-1.png">
 <p>- Migration là quá trình di chuyển máy ảo từ host vật lí này sang host vật lí khác.Migration được sinh ra để làm nhiệm vụ bảo trì nâng cấp hệ thống.Ngày nay tính năng này được phát triển để thực hiện nhiều tác vụ hơn: </p>
 <ul>
 <li>Cân bằng tải : Di chuyển VMs tới các host khác khi phát hiện host đang chạy có dấu hiệu quá tải.</li>
@@ -48,11 +48,11 @@
 <li>Khi tiến trình hoàn tất,tái sinh file libvirt xml và define nó trên destination</li>
 </ul>
 <p>Dưới đây minh hoạt cho quá trình live migrate VM:</p>
-<img src="https://github.com/anhict/images/blob/master/migration-2.png">
-<img src="https://github.com/anhict/images/blob/master/migration-3.png">
-<img src="https://github.com/anhict/images/blob/master/migration-4.png">
-<img src="https://github.com/anhict/images/blob/master/migration-5.png">
-<img src="https://github.com/anhict/images/blob/master/migration-6.png">
+<img src="/img/migration-2.png">
+<img src="/img/migration-3.png">
+<img src="/img/migration-4.png">
+<img src="/img/migration-5.png">
+<img src="/img/migration-6.png">
 <h4>2.3. So sánh ưu nhược điểm giữa cold và live migrate</h4>
 <p>- Cold migrate:</p>
 <ul>
@@ -86,7 +86,7 @@
    </ul>
 </ul>
 <p>- Trong live-migrate có 2 loại đó là True live migrate và Block live migration </p>
-<img src="https://github.com/anhict/images/blob/master/migration-7.png">
+<img src="/img/migration-7.png">
 <p>- Ngữ cảnh sử dụng: </p>
 <ul>
   <li>Nếu bạn buộc phải chọn host và giảm tối đa thời gian downtime của server thì nên chọn live-migrate (tùy vào loại storage sử dụng mà chọn true hoặc block migration).</li>
@@ -152,7 +152,7 @@ libvirtd_opts="-l"</pre>
 <pre>ps ax | grep [l]ibvirtd
 netstat -pantu | grep libvirtd
 virsh -c qemu+tcp://127.0.0.1/system</pre>
-<img src="https://github.com/anhict/images/blob/master/Screenshot_26.png">
+<img src="/img/Screenshot_26.png">
 <p>Cấu hình iptables cho phép giao thông đi qua các cổng 16509 và 49152:</p>
 <pre>iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 5900:5909 -j ACCEPT
 iptables -A INPUT -p tcp --dport 16509 -j ACCEPT
@@ -161,13 +161,13 @@ iptables -A INPUT -p tcp --dport 49152 -j ACCEPT</pre>
 <pre>systemctl restart libvirtd.service</pre>
 <h4>Migrate máy ảo</h4>
 <p>Máy VM01 ở compute1 </p>
-<img src="https://github.com/anhict/images/blob/master/Screenshot_27.png">
+<img src="/img/Screenshot_27.png">
 <p>Thực hiện migrate máy ảo bằng câu lệnh nova live-migration vm01 compute3 với những máy dùng shared storage. Đối với những máy boot từ local, sử dụng câu lệnh sau:</p>
 <pre>nova live-migration --block-migrate VM01 compute3</p>
 <p>Quá trình Migrating </p>
-<img src="https://github.com/anhict/images/blob/master/Screenshot_24.png">
+<img src="/img/Screenshot_24.png">
 <p>Máy ảo vm01 đã được chuyển đến node compute3 </p>
-<img src="https://github.com/anhict/images/blob/master/Screenshot_25.png">
+<img src="/img/Screenshot_25.png">
 
 
 

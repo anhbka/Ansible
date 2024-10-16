@@ -6,7 +6,7 @@
 <p>- Nova cũng sử dụng một cơ sở dữ liệu trung tâm chia sẻ chung giữa các thành phần. Tuy nhiên, vì mục tiêu nâng cấp, các cơ sở dữ liệu được truy cập thông qua một lớp đối tượng dể đảm bảo các thành phần kiểm soát đã nâng cấp vẫn có thể giao tiếp với nova-compute ở phiên bản trước đó. Để thực hiện điều này, nova-compute ủy nhiệm các yêu cầu tới cơ sở dữ liệu thông qua RPC tới một trình quản lý trung tâm, chính là dịch vụ <strong> nova-conductor </strong>.</p>
 <h3>2. Compute service </h3>
 - Kiến trúc Compute service :
-<img src="https://github.com/anhict/images/blob/master/9.png?raw=true">
+<img src="/img/9.png?raw=true">
 <p><li> Các dịch vụ của nova được phân loại bao gồm: </li></p>
 <p>-	<strong> API server </strong> : API server là trái tim của cloud framework, nơi thực hiện các lệnh và việc kiểm soát hypervisor, storage, networking có thể lập trình được. Các API endpoints về cơ bản là các HTTP web services thực hiện xác thực, ủy quyền và các lệnh căn bản, kiểm các các chức năng sử dụng giao diện API của Amazon, Rackspace, và các mô hình liên quan khác. Điều này cho phép các API tương thích với nhiều công cụ sẵn có, tương tác với các nhà cung cấp dịch vụ cloud khác. Điều này tạo ra để ngăn chặn vấn đề phụ thuộc vào nhà cung cấp dịch vụ.</p>
 <p>-	<strong>Message queue</strong> : Message Broker cung cấp hàng đợi lưu bản tin tương tác giữa các dịch vụ, các thành phần như compute nodes, networking controllers(phần mềm kiểm soát hạ tầng mạng), API endpoints, scheduler(xác định máy vật lý nào được sử dụng để cấp phát tài nguyên ảo hóa), và các thành phần tương tự.</p>
@@ -94,7 +94,7 @@
 
 
 <p><li><strong> Request flow trong quá trình tạo máy ảo . </strong></li></p>
-<img src="https://github.com/anhict/images/blob/master/10.png?raw=true">
+<img src="/img/10.png?raw=true">
 
 
 <p><strong>-Bước 1 </strong>: Từ Dashboard hoặc CLI, nhập thông tin chứng thực (ví dụ: user name và password) và thực hiện lời gọi REST tới Keystone để xác thực</p>

@@ -182,12 +182,6 @@ Các lệnh khác :
 `cinder backup-create <volumeid> --snapshot --incr <full backup container>`
 
 
-Tài liệu tham khảo :
-
-https://github.com/thaonguyenvan/meditech-thuctap/blob/master/ThaoNV/Tim%20hieu%20OpenStack/docs/cinder/cinder-backup.md
-
-
-
 
 
 

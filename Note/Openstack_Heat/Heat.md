@@ -54,7 +54,7 @@ Phần mềm này tích hợp các thành phần khác của OpenStack. Các tem
 
 + Các giao diện sử dụng heat-api để gửi lệnh đến Heat engine thông qua messaging service (ví dụ RabbitMQ). Một dịch vụ đo sáng như Ceilometer hoặc CloudWatch API được sử dụng để giám sát hiệu suất của các tài nguyên trong stack. Các dịch vụ monitoring/metering này được sử dụng để kích hoạt các hành động khi đạt đến một ngưỡng nhất định. Một ví dụ về điều này có thể tự động khởi chạy một máy chủ web dư thừa phía sau bộ cân bằng tải khi tải CPU trên máy chủ web chính đạt trên 90%.
 
-<img src="https://github.com/anhict/Openstack-Heat/blob/master/images/heat1.png">
+<img src="/images/heat1.png">
 
 <li>Heat-client : Chấp nhận các lệnh, tham số và template đầu vào ( URL , đường dẫn tệp hoặc dữ liệu), xử lý thông tin và gửi một yêu cầu REST API tới dịch vụ heat-api.</li>
 

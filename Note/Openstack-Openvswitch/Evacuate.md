@@ -76,13 +76,13 @@ Trong đó:
 
 Ex: Máy ảo chạy trên compute1 
 
-<img src="\img\3.jpg">
+<img src="/img/3.jpg">
 
 Giả sử compute1 bị chết :
 
-<img src="\img\4.jpg">
+<img src="/img/4.jpg">
 
-<img src="\img\5.jpg">
+<img src="/img/5.jpg">
 
 Ta tiến hành evacuate máy ảo sang compute2 bằng câu lệnh:
 
@@ -90,9 +90,9 @@ Ta tiến hành evacuate máy ảo sang compute2 bằng câu lệnh:
 
 Đợi một lúc thì máy ảo sẽ chuyển lại về trạng thái ACTIVE sau khi quá trình evacuation hoàn thành. Máy ảo lúc này đã được chuyển sang host compute2.
 
-<img src="\img\6.jpg">
+<img src="/img/6.jpg">
 
-<img src="\img\7.jpg">
+<img src="/img/7.jpg">
 
 Hướng dẫn evacuate toàn bộ máy ảo:
 

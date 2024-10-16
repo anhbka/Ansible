@@ -9,7 +9,7 @@
 <p><strong>-Database</strong>: cơ sở dữ liệu lưu trữ metadata của image</p>
 <p><strong>-Storage repository</strong>: được tích hợp với nhiều thành phần khác trong OpenStack như hệ thống file thông thường, Amazon và HTTP phục vụ cho chức năng lưu trữ images</p>
 
-<img src="https://github.com/anhict/images/blob/master/16.png?raw=true">
+<img src="/img/16.png">
 <p>Glance tiếp nhận các API request yêu cầu images từ người dùng cuối hoặc các nova component và costheer lưu trữ các file images trong hệ thống object storage Swift hoặc các storage repos khác. Glance hỗ trợ các hệ thống backend lưu trữ sau:</p>
 <ul>
 <p>•	File system: Glance lưu trữ images của các máy ảo trong hệ thống tệp tin thông thường theo mặc định, hỗ trợ đọc ghi các image files dễ dàng vào hệ thống tệp tin </p>
@@ -33,11 +33,11 @@
 <p>•	Glance Store: tổ chức việc tương tác giữa Glance và các hệ thống lưu trữ dữ liệu</p>
 <p>•	Registry Layer: lớp tùy chọn tổ chức việc giao tiếp một cách bảo mật giữa domain và DAL nhờ việc sử dụng một dịch vụ riêng biệt</p>
 </ul>
-<img src="https://github.com/anhict/images/blob/master/17.png?raw=true">
+<img src="/img/17.png">
 <li>Các định dạng lưu trữ image của Glance</li>
-<img src="https://github.com/anhict/images/blob/master/18.png?raw=true">
+<img src="/img/18.png">
 <p>Container Formats mô tả định dạng files và chứa các thông tin metadata về máy ảo thực sự. Các định dạng container hỗ trợ bởi Glance.</p>
-<img src="https://github.com/anhict/images/blob/master/19.png?raw=true">
+<img src="/img/19.png">
 <p>•	Luồng trạng thái của Glance</p>
 <ul>
 <p>-	Queued: Định danh của image được bảo vệ trong Glance registry. Không có dữ liệu nào của image được tải lên Glance và kích thước của image không được thiết lập rõ ràng sẽ được thiết lập về zero khi khởi tạo.</p>
@@ -49,7 +49,7 @@
 <p>-	Pending_delete: Tương tự như trạng thái deleted, tuy nhiên Glance chưa gỡ bỏ dữ liệu của image ngay. Một image khi đã rơi vào trạng thái này sẽ không có khả năng khôi phục.</p>
 
 </ul>
-<img src="https://github.com/anhict/images/blob/master/20.png?raw=true">
+<img src="/img/20.png">
 <h3>4.	Các file cấu hình Glance </h3>
 <p>-Các tệp cấu hình của glance nằm trong thư mục /etc/glance. Có tất cả 7 tệp cấu hình như sau: </p>
 <p>-glance-api.conf: File cấu hình cho API của image service.</p>
