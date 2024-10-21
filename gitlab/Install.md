@@ -252,8 +252,18 @@ sudo gitlab-runner start
 
 ```
 vim /etc/systemd/system/gitlab-runner.service
+[Unit]
+Description=GitLab Runner
+After=network.target
+
 [Service]
-User=myuser
+User=gitlab-runner
+Group=gitlab-runner
+ExecStart=/usr/bin/gitlab-runner run --working-directory /home/gitlab-runner
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 * install docker on server
