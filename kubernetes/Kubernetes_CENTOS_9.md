@@ -61,11 +61,11 @@ hostnamectl set-hostname master
 exec bash
 
 - Node Worker01:
-hostnamectl set-hostname Worker01
+hostnamectl set-hostname worker01
 exec bash
 
 - Node Worker02:
-hostnamectl set-hostname Worker02
+hostnamectl set-hostname worker02
 exec bash
 ```
 
@@ -137,8 +137,6 @@ To apply the changes made in the last step, restart containerd.
 
 ```
 systemctl enable --now containerd.service
-
-crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock
 ```
 
 Verify that containerd is running using this command:
@@ -174,6 +172,8 @@ Step 10: Enable kubelet
 Enable the Kubelet service on all machines.
 
 `systemctl enable kubelet --now`
+
+`crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock` #Fix warning crictl
 
 *Don’t worry about any kubelet errors at this point. Once the worker nodes are successfully joined to the Kubernetes cluster using the provided join command, the kubelet service on each worker node will automatically activate and start communicating with the control plane. The kubelet is responsible for managing the containers on the node and ensuring that they run according to the specifications provided by the Kubernetes control plane.*
 
