@@ -1,10 +1,10 @@
-## Install a Kubernetes cluster v1.30 on CentOS 9
+### Kubernetes install on CentOs 7
 
 * Prerequisites:
 
 Before we begin the installation process, ensure you have the following prerequisites:
 
-A minimum of three nodes (one master and two worker nodes) running either Red Hat Enterprise Linux 9 or CentOS 9.
+A minimum of three nodes (one master and two worker nodes) running either Red Hat Enterprise Linux 7 or CentOS 9.
 
 Each node should have a minimum of 4GB RAM and 2 CPU cores.
 
@@ -14,51 +14,69 @@ If you do not have a DNS setup, each node should have the following entries in t
 
 ### * *Setup for master, worker1, worker2*
 
-### Step 1: Download & Install CentOS Stream 9
+### Step 1: Download & Install CentOS 7
 
 | Hostname | RAM | CPU | OS | IP Address |
 |----------|-----|-----|----|------------|
-|  Master  | 4GB |2    |CentOS Stream 9|192.168.99.101|
-|  Worker01  | 4GB |2    |CentOS Stream 9|192.168.99.102|
-|  Worker02  | 4GB |2    |CentOS Stream 9|192.168.99.103|
+|  Master  | 4GB |2    |CentOS 7|192.168.99.101|
+|  Worker01  | 4GB |2    |CentOS 7|192.168.99.102|
+|  Worker02  | 4GB |2    |CentOS 7|192.168.99.103|
 
-Stop the firewall on all node:
 ```
+cat >> /etc/hosts <<EOF
+192.168.99.101    master
+192.168.99.102    worker1
+192.168.99.103    worker2
+EOF
+```
+
+```
+setenforce 0
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 systemctl stop firewalld
 systemctl disable firewalld
 systemctl status firewalld
 ```
-
-Install below mentioned packages (All nodes):
-
-`dnf install -y wget git curl`
-
-
-### Step 2: After completing the CentOS installation provide the Static IP. Setup Static IP Address.
-
-Refer: `https://www.server-world.info/en/note?os=CentOS_Stream_9&p=initial_conf&f=3`
+* Update repo
 
 ```
-cd  /etc/NetworkManager/system-connections
-nmcli connection modify ens160 ipv4.addresses 192.168.99.101/24
-nmcli connection modify ens160 ipv4.gateway 192.168.99.2
-nmcli connection modify ens160 ipv4.gateway 8.8.8.8
-nmcli connection modify ens160 ipv4.gateway "8.8.8.8  8.8.4.4"  #(For setting multiple DNS)
-nmcli connection modify ens160 ipv4.method manual #(For static it is manual)
-nmcli connection modify ens160 ipv4.method auto #(For DHCP it is auto)
-nmcli connection down ens160 && nmcli connection up ens160
+vim /etc/yum.repos.d/CentOS-Base.repo
 
+[base]
+name=CentOS-$releasever - Base
+baseurl=http://vault.centos.org/7.9.2009/os/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
-Confirm the changes made by typing down the below command:
+[updates]
+name=CentOS-$releasever - Updates
+baseurl=http://vault.centos.org/7.9.2009/updates/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
-nmcli device show ens160
+[extras]
+name=CentOS-$releasever - Extras
+baseurl=http://vault.centos.org/7.9.2009/extras/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
-192.168.99.101 	master    # Replace with your actual hostname and IP address
-192.168.99.102 	worker1   # Replace with your actual hostname and IP address
-192.168.99.103	worker2   # Replace with your actual hostname and IP address
+[centosplus]
+name=CentOS-$releasever - Plus
+baseurl=http://vault.centos.org/7.9.2009/centosplus/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
 ```
 
-### Step 3: Set file hosts, hostname for master, worker1, worker2
+```
+yum clean all && yum repolist
+yum groupinstall "Development Tools" -y
+yum install yum-utils -y
+```
+
+### Step 2: Set file hosts, hostname for master, worker1, worker2
 
 ```
 vi /etc/hosts
@@ -80,85 +98,70 @@ exec bash
 hostnamectl set-hostname worker02
 exec bash
 ```
-
-### Step 4: Turn-Off Swap (all nodes)
+ 
+### Step 3: Turn-Off Swap (all nodes)
 
 ```
 swapoff -a
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-```
-
-### Step 5: Set SELinux in permissive mode (effectively disabling it).
-
-```
-setenforce 0
-sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
-
-To verify the SELINUX status
-cat /etc/selinux/config
-```
-
-### Step 6: Load two required modules and add configuration to make them loadable at boot time.
-
-```
-modprobe overlay
-modprobe br_netfilter
-
-cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
+ 
+cat > /etc/modules-load.d/containerd.conf <<EOF
 overlay
 br_netfilter
 EOF
-
-Set up other prerequisites.
-
-cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+ 
+modprobe overlay
+modprobe br_netfilter
+ 
+cat << EOF > /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
-net.bridge.bridge-nf-call-ip6tables = 1
+vm.swappiness = 0
 EOF
 
-Make the above settings applicable without restarting.
+#Make the above settings applicable without restarting. 
 
 sysctl --system
 ```
 
-### Step 7: Install containerd
+### Step 4: Install containerd
 
-Add the official Docker repository.
+Add the official Docker repository:
 
 ```
-dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-dnf update -y
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum update -y
 ```
+ 
+Install the containerd package:
 
-Install the containerd package.
-
-`dnf install -y containerd.io`
-
-Create a configuration file for containerd and set it to default.
-
+`yum install -y containerd.io `
+ 
+Create a configuration file for containerd and set it to default:
+ 
 ```
 mkdir -p /etc/containerd
 containerd config default | sudo tee /etc/containerd/config.toml
 sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
 
-### If want change to gcr.io repo run command bellow
+#If want change to gcr.io repo run command bellow
 
 sed -i '/\[plugins."io.containerd.grpc.v1.cri".registry.mirrors\]/a \
         [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gcr.io"] \
           endpoint = ["https://gcr.io"]' /etc/containerd/config.toml
           
 cat /etc/containerd/config.toml | egrep -iE "registry.mirrors|io.containerd.grpc.v1.cri" -C5
-```
-
+``` 
+ 
 Restart containerd
 
 To apply the changes made in the last step, restart containerd.
 
 ```
 systemctl enable --now containerd.service
-```
-
+``` 
+ 
 Verify that containerd is running using this command:
 
 ```
@@ -167,7 +170,7 @@ root       43905       1  1 15:50 ?        00:00:00 /usr/bin/containerd
 root       43974     982  0 15:50 pts/0    00:00:00 grep --color=auto containerd
 ```
 
-### Step 8: Add the Kubernetes repository
+### Step 5: Add the Kubernetes repository
 
 ```
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
@@ -181,25 +184,38 @@ exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
 EOF
 ```
 
-### Step 9: Install Modules
+Or you can use other repo bellow:
 
-Update your machines and then install all Kubernetes modules.
+```
+cat > /etc/yum.repos.d/kubernetes.repo << EOF
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+```
 
-`dnf makecache; dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes`
+### Step 6: Install Modules update your machines and then install all Kubernetes modules.
 
-### Step 10: Enable kubelet
+
+`yum install -y kubelet kubeadm kubectl`
+
+### Step 7: Enable kubelet
 
 Enable the Kubelet service on all machines.
 
 `systemctl enable kubelet --now`
 
-`crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock` #Fix warning crictl
+`crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock` `#Fix warning crictl`
 
 *Don’t worry about any kubelet errors at this point. Once the worker nodes are successfully joined to the Kubernetes cluster using the provided join command, the kubelet service on each worker node will automatically activate and start communicating with the control plane. The kubelet is responsible for managing the containers on the node and ensuring that they run according to the specifications provided by the Kubernetes control plane.*
 
 *NOTE: Up until this point of the installation process, we’ve installed and configured Kubernetes components on all nodes. From this point onward, we will focus on the master node.*
 
-### Step 11: Deploy the Cluster on node Master
+### Step 8: Deploy the Cluster on node Master
 
 Great! Let’s proceed with initializing the Kubernetes control plane on the master node. Here’s how we can do it:
 
@@ -267,7 +283,7 @@ kube-system   kube-scheduler-master            1/1     Running   0          2m7s
 ```
 ### 2. Initializing Kubernetes Control Plane
 
-### Step 12: Deploy the pod network to the cluster.
+### Step 9: Deploy the pod network to the cluster.
 
 ```
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/calico.yaml -O
@@ -360,7 +376,7 @@ kube-scheduler-master                      1/1     Running   0          17m     
 
 ### 3. Initializing Kubernetes worker node
 
-### Step 13: Now we need to join worker machine node1/2 to k8 master. (Run on both worker01/02)
+### Step 10: Now we need to join worker machine node1/2 to k8 master. (Run on both worker01/02)
 
 ```
 kubeadm join 192.168.99.101:6443 --token tp8n7k.t9ac8ffvyrz0zt82 \
@@ -429,7 +445,7 @@ bash
 --cluster                   (The name of the kubeconfig cluster to use)
 ```
 
-### Step 14: NGINX Test Deployment (Run on master node)
+### Step 11: NGINX Test Deployment (Run on master node)
 
 To test your Kubernetes cluster, you can deploy a simple application such as a NGINX web server. Here’s a sample YAML manifest to deploy NGINX as a test deployment:
 
@@ -498,3 +514,4 @@ nginx-service   LoadBalancer   10.97.191.219   <pending>     80:30568/TCP   6s
 
 That’s it! Our 1-master-2-worker Kubernetes cluster is ready!
 To add more nodes, simply repeat this step on other machines.
+
