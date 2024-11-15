@@ -201,7 +201,7 @@ EOF
 ### Step 6: Install Modules update your machines and then install all Kubernetes modules.
 
 
-`yum install -y kubelet kubeadm kubectl`
+`yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes`
 
 ### Step 7: Enable kubelet
 
@@ -220,13 +220,13 @@ Enable the Kubelet service on all machines.
 Great! Let’s proceed with initializing the Kubernetes control plane on the master node. Here’s how we can do it:
 
 ```
-sudo kubeadm config images pull
+kubeadm config images pull
 
 ```
 
 After executing this command, Kubernetes will pull the necessary container images from the default container registry (usually Docker Hub) and store them locally on the machine. This step is typically performed before initializing the Kubernetes cluster to ensure that all required images are available locally and can be used without relying on an external registry during cluster setup.
 
-`sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.99.101`
+`kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.99.101`
 
 ```
 Your Kubernetes control-plane has initialized successfully!
@@ -424,7 +424,7 @@ kubeadm join 192.168.99.101:6443 --token spbila.60jx8l4ioplnafnc --discovery-tok
 - Enable Auto-Completion for Kubectl on master node:
 
 ```
-yum install bash-completion
+yum install bash-completion -y
 kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 echo 'alias k=kubectl' >>~/.bashrc
 echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
