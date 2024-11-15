@@ -424,7 +424,7 @@ kubeadm join 192.168.99.101:6443 --token spbila.60jx8l4ioplnafnc --discovery-tok
 - Enable Auto-Completion for Kubectl on master node:
 
 ```
-dnf install bash-completion
+yum install bash-completion
 kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 echo 'alias k=kubectl' >>~/.bashrc
 echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
