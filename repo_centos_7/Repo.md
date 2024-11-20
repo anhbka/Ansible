@@ -19,7 +19,7 @@ https://mirror.nsc.liu.se/centos-store/centos/7.9.2009/
 http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/
 https://mirror.cs.princeton.edu/pub/mirrors/centos/7.9.2009/
 
-cat <<\EOF > /etc/yum.repo.d/CentOS-Base.repo
+cat <<\EOF > /etc/yum.repos.d/CentOS-Base.repo
 [base]
 name=CentOS-$releasever - Base
 baseurl=http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/os/$basearch/
