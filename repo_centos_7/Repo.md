@@ -3,9 +3,12 @@
 - Fix CentOS 7 Repositories Not Working (2024):
 
 ```
-sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
-sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo
-sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+sed -i 's/mirror.centos.org/vault.centos.org/g' /etc/yum.repos.d/*.repo
+sed -i 's/^#.*baseurl=http/baseurl=http/g' /etc/yum.repos.d/*.repo
+sed -i 's/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
+
+sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 ```
 
 - Update repo Ubuntu/Centos 7 VietNam:
@@ -13,12 +16,16 @@ sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
 ```
 https://launchpad.net/ubuntu/+archivemirrors repo ubuntu VietNam
 
-
 https://mirrors.bkns.vn/centos/7.9.2009/
-https://mirror.nsc.liu.se/centos-store/centos/7.9.2009/
-http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/
-https://mirror.cs.princeton.edu/pub/mirrors/centos/7.9.2009/
 
+https://mirror.nsc.liu.se/centos-store/centos/7.9.2009/
+
+http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/
+
+https://mirror.cs.princeton.edu/pub/mirrors/centos/7.9.2009/
+```
+
+```
 cat <<\EOF > /etc/yum.repos.d/CentOS-Base.repo
 [base]
 name=CentOS-$releasever - Base

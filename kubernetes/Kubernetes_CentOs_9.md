@@ -94,7 +94,7 @@ sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 setenforce 0
 sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
 
-To verify the SELINUX status
+#To verify the SELINUX status
 cat /etc/selinux/config
 ```
 
@@ -109,7 +109,7 @@ overlay
 br_netfilter
 EOF
 
-Set up other prerequisites.
+#Set up other prerequisites.
 
 cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
 net.bridge.bridge-nf-call-iptables = 1
@@ -117,7 +117,7 @@ net.ipv4.ip_forward = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 EOF
 
-Make the above settings applicable without restarting.
+#Make the above settings applicable without restarting.
 
 sysctl --system
 ```
