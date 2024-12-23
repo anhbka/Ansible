@@ -42,8 +42,7 @@ Refer: `https://www.server-world.info/en/note?os=CentOS_Stream_9&p=initial_conf&
 cd  /etc/NetworkManager/system-connections
 nmcli connection modify ens160 ipv4.addresses 192.168.99.101/24
 nmcli connection modify ens160 ipv4.gateway 192.168.99.2
-nmcli connection modify ens160 ipv4.gateway 8.8.8.8
-nmcli connection modify ens160 ipv4.gateway "8.8.8.8  8.8.4.4"  #(For setting multiple DNS)
+nmcli connection modify ens160 ipv4.dns 8.8.8.8
 nmcli connection modify ens160 ipv4.method manual #(For static it is manual)
 nmcli connection modify ens160 ipv4.method auto #(For DHCP it is auto)
 nmcli connection down ens160 && nmcli connection up ens160

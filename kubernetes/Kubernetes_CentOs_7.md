@@ -358,7 +358,7 @@ etcd-0               Healthy   ok
 
 [root@master ~]# kubectl get nodes -o wide
 NAME     STATUS   ROLES           AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE          KERNEL-VERSION          CONTAINER-RUNTIME
-master   Ready    control-plane   15m   v1.30.6   192.168.30.136   <none>        CentOS Stream 9   5.14.0-522.el9.x86_64   containerd://1.7.22
+master   Ready    control-plane   15m   v1.30.6   192.168.30.136   <none>        CentOS 7          5.14.0-522.el9.x86_64   containerd://1.7.22
 
 [root@master ~]# kubectl get pods -n kube-system -o wide
 NAME                                       READY   STATUS    RESTARTS   AGE     IP               NODE     NOMINATED NODE   READINESS GATES
