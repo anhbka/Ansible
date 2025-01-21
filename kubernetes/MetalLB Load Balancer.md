@@ -23,8 +23,17 @@ ipvs:
 ### Steps 3: Layer 2 Configuration for to advertise the IP Pool
 
 ```
-vim metallb-ipadd-pool.yaml
+If see Error:
+Error from server (InternalError): error when creating "metallb-ipadd-pool.yaml": Internal error occurred: failed calling webhook "ipaddresspoolvalidationwebhook.metallb.io": failed to call webhook: Post "https://webhook-service.metallb-system.svc:443/validate-metallb-io-v1beta1-ipaddresspool?timeout=10s": dial tcp 10.103.157.82:443: connect: connection refused
 
+kubectl get validatingwebhookconfiguration
+kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io metallb-webhook-configuration
+```
+
+```
+vim metallb-ipadd-pool.yaml
+```
+```
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
@@ -35,13 +44,16 @@ spec:
   - 192.168.99.240-192.168.99.250
 ```
 
+
+
 `kubectl apply -f metallb-ipadd-pool.yaml`
 
 ### Steps 4: Advertise the IP Address Pool
 
 ```
 vim metallb-pool-advertise.yaml
-
+```
+```
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
@@ -68,11 +80,13 @@ speaker-h8tr2                 1/1     Running   0          3m33s
 ```
 kubectl create deployment nginx-web-server --image=nginx
 kubectl expose deployment nginx-web-server --port=80 --target-port=80 --type=LoadBalancer
-[root@master ~]# kubectl get svc
+```
+```
+kubectl get svc
 NAME               TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
 kubernetes         ClusterIP      10.96.0.1       <none>           443/TCP        24h
 nginx-web-server   LoadBalancer   10.104.166.72   192.168.99.240   80:31254/TCP   8s
-[root@master ~]# curl 100.77.196.240
+[root@master ~]# curl 192.168.99.240
 <!DOCTYPE html>
 <html>
 <head>

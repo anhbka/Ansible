@@ -26,7 +26,6 @@ Stop the firewall on all node:
 ```
 systemctl stop firewalld
 systemctl disable firewalld
-systemctl status firewalld
 ```
 
 Install below mentioned packages (All nodes):
@@ -269,9 +268,12 @@ kube-system   kube-scheduler-master            1/1     Running   0          2m7s
 ### Step 12: Deploy the pod network to the cluster.
 
 ```
-curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/calico.yaml -O
-kubectl apply -f calico.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 
+kubectl apply -f calico.yaml
+```
+
+```
 [root@master ~]# kubectl apply -f calico.yaml
 poddisruptionbudget.policy/calico-kube-controllers created
 serviceaccount/calico-kube-controllers created
