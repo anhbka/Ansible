@@ -150,7 +150,7 @@ Deploy provisioner using following helm command
 helm install -n nfs-provisioning --create-namespace nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=192.168.30.142 --set nfs.path=/opt/dynamic-storage
 ```
 
-Step 7) Create Persistent Volume Claims (PVCs)
+### Step 7) Create Persistent Volume Claims (PVCs)
 
 Above helm command will automatically create nfs-provisioning namespace and will install nfs provisioner pod/deployment, storage class with name (nfs-client) and will created the required rbac.
 
@@ -185,7 +185,7 @@ kubectl create -f demo-pvc.yml
 kubectl get pv,pvc -n nfs-provisioning
 ```
 
-Step 8) Test and Verify Dynamic NFS Provisioning
+### Step 8) Test and Verify Dynamic NFS Provisioning
 
 
 ```

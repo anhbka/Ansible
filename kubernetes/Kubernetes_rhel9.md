@@ -153,6 +153,7 @@ gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
 exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
 EOF
 ```
+
 Refer: `https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/`
 
 ### 6) Install Kubeadm, kubelet & kubectl
