@@ -119,7 +119,6 @@ sysctl --system
 
 ```
 sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
-dnf install containerd.io -y
 ```
 
 Or use curl file:
@@ -127,6 +126,9 @@ Or use curl file:
 ```
 curl -Lo /etc/yum.repos.d/docker-ce.repo https://raw.githubusercontent.com/anhbka/Ansible/master/repo/docker-ce.repo
 ``` 
+Install the containerd package:
+
+`yum install -y containerd.io `
 
 Post installation start & enable containerd service.
 
@@ -156,7 +158,7 @@ Refer: `https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/in
 ### 6) Install Kubeadm, kubelet & kubectl
 
 ```
-sudo dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 ```
 
 ### 7) Enable kubelet
