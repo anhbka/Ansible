@@ -133,6 +133,12 @@ Add the official Docker repository:
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 yum update -y
 ```
+
+Or use curl file:
+
+```
+curl -Lo /etc/yum.repos.d/docker-ce.repo https://raw.githubusercontent.com/anhbka/Ansible/master/Repo/docker-ce.repo
+``` 
  
 Install the containerd package:
 
@@ -183,6 +189,8 @@ gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
 exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
 EOF
 ```
+
+Refer: `https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/`
 
 Or you can use other repo bellow:
 
@@ -281,55 +289,27 @@ kube-system   kube-controller-manager-master   1/1     Running   0          2m7s
 kube-system   kube-proxy-xps5v                 1/1     Running   0          111s
 kube-system   kube-scheduler-master            1/1     Running   0          2m7s
 ```
+
+- Enable Auto-Completion for Kubectl on master node:
+
+```
+yum install bash-completion -y
+kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
+echo 'alias k=kubectl' >>~/.bashrc
+echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
+bash
+```
+
 ### 2. Initializing Kubernetes Control Plane
 
-### Step 9: Deploy the pod network to the cluster.
+### Step 9: Deploy the pod network to the cluster run on Master node.
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
-
-kubectl apply -f calico.yaml
 ```
 
 ```
-
-[root@master ~]# kubectl apply -f calico.yaml
-poddisruptionbudget.policy/calico-kube-controllers created
-serviceaccount/calico-kube-controllers created
-serviceaccount/calico-node created
-serviceaccount/calico-cni-plugin created
-configmap/calico-config created
-customresourcedefinition.apiextensions.k8s.io/bgpconfigurations.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/bgpfilters.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/bgppeers.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/caliconodestatuses.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/clusterinformations.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/felixconfigurations.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/globalnetworkpolicies.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/globalnetworksets.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/hostendpoints.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/ipamblocks.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/ipamconfigs.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/ipamhandles.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/ippools.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/ipreservations.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/kubecontrollersconfigurations.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/networkpolicies.crd.projectcalico.org created
-customresourcedefinition.apiextensions.k8s.io/networksets.crd.projectcalico.org created
-clusterrole.rbac.authorization.k8s.io/calico-kube-controllers created
-clusterrole.rbac.authorization.k8s.io/calico-node created
-clusterrole.rbac.authorization.k8s.io/calico-cni-plugin created
-clusterrolebinding.rbac.authorization.k8s.io/calico-kube-controllers created
-clusterrolebinding.rbac.authorization.k8s.io/calico-node created
-clusterrolebinding.rbac.authorization.k8s.io/calico-cni-plugin created
-daemonset.apps/calico-node created
-deployment.apps/calico-kube-controllers created
-
-```
-
-```
-[root@master ~]# kubectl get pod -A
+kubectl get pod -A
 NAMESPACE     NAME                                       READY   STATUS              RESTARTS   AGE
 kube-system   calico-kube-controllers-8558877b58-w6cw2   0/1     ContainerCreating   0          35s
 kube-system   calico-node-fcc4d                          0/1     Init:2/3            0          35s
@@ -341,7 +321,7 @@ kube-system   kube-controller-manager-master             1/1     Running        
 kube-system   kube-proxy-xps5v                           1/1     Running             0          13m
 kube-system   kube-scheduler-master                      1/1     Running             0          14m
 
-[root@master ~]# kubectl get pod -A
+kubectl get pod -A
 NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE
 kube-system   calico-kube-controllers-8558877b58-w6cw2   1/1     Running   0          2m5s
 kube-system   calico-node-fcc4d                          1/1     Running   0          2m5s
@@ -353,18 +333,18 @@ kube-system   kube-controller-manager-master             1/1     Running   0    
 kube-system   kube-proxy-xps5v                           1/1     Running   0          15m
 kube-system   kube-scheduler-master                      1/1     Running   0          15m
 
-[root@master ~]# kubectl get componentstatus
+kubectl get componentstatus
 Warning: v1 ComponentStatus is deprecated in v1.19+
 NAME                 STATUS    MESSAGE   ERROR
 controller-manager   Healthy   ok
 scheduler            Healthy   ok
 etcd-0               Healthy   ok
 
-[root@master ~]# kubectl get nodes -o wide
+kubectl get nodes -o wide
 NAME     STATUS   ROLES           AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE          KERNEL-VERSION          CONTAINER-RUNTIME
 master   Ready    control-plane   15m   v1.30.6   192.168.30.136   <none>        CentOS 7          5.14.0-522.el9.x86_64   containerd://1.7.22
 
-[root@master ~]# kubectl get pods -n kube-system -o wide
+kubectl get pods -n kube-system -o wide
 NAME                                       READY   STATUS    RESTARTS   AGE     IP               NODE     NOMINATED NODE   READINESS GATES
 calico-kube-controllers-8558877b58-w6cw2   1/1     Running   0          4m26s   10.244.219.67    master   <none>           <none>
 calico-node-fcc4d                          1/1     Running   0          4m26s   192.168.30.136   master   <none>           <none>
@@ -387,33 +367,14 @@ kubeadm join 192.168.99.101:6443 --token tp8n7k.t9ac8ffvyrz0zt82 \
         --discovery-token-ca-cert-hash sha256:33f0e8633a735d82ea3df16127a7374333d2511d3f3a739228081939c5f6fea8
 ```
 
-```
-[root@worker01 ~]# kubeadm join 192.168.99.101:6443 --token tp8n7k.t9ac8ffvyrz0zt82 \
-        --discovery-token-ca-cert-hash sha256:33f0e8633a735d82ea3df16127a7374333d2511d3f3a739228081939c5f6fea8
-[preflight] Running pre-flight checks
-[preflight] Reading configuration from the cluster...
-[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
-[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
-[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
-[kubelet-start] Starting the kubelet
-[kubelet-check] Waiting for a healthy kubelet at http://127.0.0.1:10248/healthz. This can take up to 4m0s
-[kubelet-check] The kubelet is healthy after 1.003212527s
-[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap
-
-This node has joined the cluster:
-* Certificate signing request was sent to apiserver and a response was received.
-* The Kubelet was informed of the new secure connection details.
-
-Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
-```
-
 - Run command line check on node master:
 
 ```
-[root@master ~]# kubectl get nodes
+kubectl get nodes
 NAME       STATUS   ROLES           AGE   VERSION
-master     Ready    control-plane   20m   v1.30.6
-worker01   Ready    <none>          53s   v1.30.6
+master     Ready    control-plane   30m   v1.30.6
+worker01   Ready    <none>          25m   v1.30.6
+worker02   Ready    <none>          25m   v1.30.6
 ```
 
 - Note: If you forget to copy the command, or can’t find it anymore, you can regenerate it by using the following command:
@@ -425,37 +386,14 @@ kubeadm token create --print-join-command
 kubeadm join 192.168.99.101:6443 --token spbila.60jx8l4ioplnafnc --discovery-token-ca-cert-hash sha256:99dd6c409251c54f30ff0a16efce6ac683e5b10c3c138df5bbc4d09036752c53
 ```
 
-- Enable Auto-Completion for Kubectl on master node:
-
-```
-yum install bash-completion -y
-kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
-echo 'alias k=kubectl' >>~/.bashrc
-echo 'complete -o default -F __start_kubectl k' >>~/.bashrc
-bash
-```
-
-+ Run test:
-
-```
-[root@master ~]# k -
---as-group                  (Group to impersonate for the operation, this flag can be repeated to specify multiple groups.)
---as-uid                    (UID to impersonate for the operation.)
---as                        (Username to impersonate for the operation. User could be a regular user or a service account in a namespace.)
---cache-dir                 (Default cache directory)
---certificate-authority     (Path to a cert file for the certificate authority)
---client-certificate        (Path to a client certificate file for TLS)
---client-key                (Path to a client key file for TLS)
---cluster                   (The name of the kubeconfig cluster to use)
-```
-
 ### Step 11: NGINX Test Deployment (Run on master node)
 
 To test your Kubernetes cluster, you can deploy a simple application such as a NGINX web server. Here’s a sample YAML manifest to deploy NGINX as a test deployment:
 
 ```
 vim nginx-deployment.yaml
-
+```
+```
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -480,12 +418,16 @@ spec:
 ```
 ```
 kubectl apply -f nginx-deployment.yaml
-
-[root@master ~]# kubectl get deployments
+```
+```
+kubectl get deployments
 NAME               READY   UP-TO-DATE   AVAILABLE   AGE
 nginx-deployment   3/3     3            3           14m
-
-[root@master ~]# k get pod
+```
+```
+k get pod
+```
+```
 NAME                               READY   STATUS    RESTARTS   AGE
 nginx-deployment-576c6b7b6-28x9d   1/1     Running   0          14m
 nginx-deployment-576c6b7b6-6vtg9   1/1     Running   0          14m
@@ -496,7 +438,8 @@ Expose NGINX to the external network:
 
 ```
 vim nginx-service.yaml
-
+```
+```
 apiVersion: v1
 kind: Service
 metadata:
@@ -509,8 +452,11 @@ spec:
       port: 80
       targetPort: 80
   type: LoadBalancer
-  
-[root@master ~]# kubectl get service nginx-service
+```
+```  
+kubectl get service nginx-service
+```
+```
 NAME            TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 nginx-service   LoadBalancer   10.97.191.219   <pending>     80:30568/TCP   6s
   
@@ -518,4 +464,3 @@ nginx-service   LoadBalancer   10.97.191.219   <pending>     80:30568/TCP   6s
 
 That’s it! Our 1-master-2-worker Kubernetes cluster is ready!
 To add more nodes, simply repeat this step on other machines.
-
