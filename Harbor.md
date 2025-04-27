@@ -150,3 +150,63 @@ docker images
 ```
 
 <img src="/img/harbor.png">
+
+```
+cat ~/.docker/config.json
+```
+
+The output contains a section similar to this:
+
+```
+{
+    "auths": {
+        "https://index.docker.io/v1/": {
+            "auth": "c3R...zE2"
+        }
+    }
+}
+```
+
+Create a Secret based on existing credentials
+
+```
+kubectl create secret generic regcred \
+    --from-file=.dockerconfigjson=<path/to/.docker/config.json> \
+    --type=kubernetes.io/dockerconfigjson
+```
+
+Add the Mirror Configuration: Open the configuration file in a text editor:
+
+```
+https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+```
+
+sudo vi /etc/containerd/config.toml
+
+Find the `[plugins."io.containerd.grpc.v1.cri".registry]` section and add the mirror configuration for your Harbor registry. It should look something like this:
+
+```
+sudo cp /path/to/your/cert.crt /etc/containerd/certs.d/myharbor.harborsdsv.com/ca.crt
+
+[plugins."io.containerd.grpc.v1.cri".registry]
+  config_path = "/etc/containerd/certs.d"
+  [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."myharbor.harborsdsv.com"]
+      endpoint = ["https://myharbor.harborsdsv.com"]
+	  
+sudo systemctl restart containerd
+```	  
+Create a Pod that uses your Secret:
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: private-reg
+spec:
+  containers:
+  - name: private-reg-container
+    image: <your-private-image>
+  imagePullSecrets:
+  - name: regcred
+```	  
