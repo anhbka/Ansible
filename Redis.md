@@ -48,6 +48,8 @@ echo 1 > /proc/sys/vm/swappiness
 echo 'vm.swappiness = 1' >> /etc/sysctl.conf
 ```
 
+Certain operating system settings can affect Redis performance. The Linux kernel parameters `vm.overcommit_memory` and `vm.swappiness` are two examples. Setting `vm.overcommit_memory = 1` tells Linux to relax its check for available memory before allocating more, while `vm.swappiness = 0` reduces the use of swap space, promoting better Redis performance.
+
 ### Choosing right memory allocators
 
 Depending on the platform, Redis can be compiled against different memory allocators (libc malloc, jemalloc, tcmalloc), which may have different behaviors in term of raw speed, internal and external fragmentation. If you did not compile Redis yourself, you can use the INFO command to check the mem_allocator field. Please note most benchmarks do not run long enough to generate significant external fragmentation (contrary to production Redis instances).
@@ -84,11 +86,12 @@ To enable TCP keepalive, edit your redis config file and enable or update this v
 
 Editing default config file `/etc/redis/redis.conf`
 
-Update the value to 0
 
 ```
 tcp-keepalive 0
 ```
+
+Modifying timeout settings such as `timeout` and `tcp-keepalive` can prevent idle clients from consuming resources indefinitely and helps maintaining healthy connections respectively.
 
 Disable saving redis to disk in redis.conf
 
@@ -132,3 +135,43 @@ When using Redis for persistence storage, the best option for optimal and perfor
 If you care a lot about your data, but still can live with a few minutes of data loss in case of disasters, you can simply use RDB alone. There are many users using AOF alone, but the Redis community discourages it since having an RDB snapshot from time to time is a great idea for doing database backups, for faster restarts, and in the event of bugs in the AOF engine.
 
 It is also likely that in the future release of Redis, they will likely end up unifying AOF and RDB into a single persistence model and for the long term plan.
+
+### 11. The maximum value of the connection queue
+
+Open the configuration file:
+
+`nano /etc/rc.local`
+
+Find the following line in the configuration body and set the same value as indicated below:
+
+```
+sysctl -w net.core.somaxconn=65535
+```
+
+### 12. Memory optimization
+
+Redis >= 7.2
+
+The following directives are also available:
+
+```
+set-max-listpack-entries 128
+set-max-listpack-value 64
+```
+
+If a specially encoded value overflows the configured max size, Redis will automatically convert it into normal encoding. This operation is very fast for small values, but if you change the setting in order to use specially encoded values for much larger aggregate types the suggestion is to run some benchmarks and tests to check the conversion time.
+
+`https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/memory-optimization/`
+
+Configure AOF with `appendfsync everysec` option, which offers a good compromise between performance and durability.
+
+Redis allows you to define how it should evict data when memory limits are reached. The optimal policy depends on your application's specific needs. For instance, 'allkeys-lru' removes less recently used keys first, which is generally efficient, but in certain contexts 'volatile-lfu' (Least Frequently Used keys with an expire set) may provide better results.
+
+Data compression helps reduce memory footprint at the cost of CPU cycles. It may be beneficial in scenarios where memory is scarce or expensive compared to the CPU. Libraries like zlib, lz4, and snappy can compress your values prior to storing them in Redis.
+
+For a resilient system, consider using Redis Sentinel, which provides high-availability for Redis. By monitoring master and replicas, it enables automatic failover during outages. However, keep in mind that mastering Sentinel requires a deep understanding of your system's failure scenarios.
+
+```
+https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/memory-optimization/
+https://www.dragonflydb.io/guides/redis-memory-and-performance-optimization
+```

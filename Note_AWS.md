@@ -83,6 +83,12 @@ Traffic Flow:
 Cung cấp khả năng quản lý lưu lượng truy cập phức tạp thông qua các chính sách định tuyến.
 ```
 
-
+```
+Standard Retrieval: Phù hợp cho dữ liệu không cần truy xuất thường xuyên, có thời gian truy xuất từ 1-5 giờ.
+Flexible Retrieval: Linh hoạt hơn về thời gian, phù hợp cho nhu cầu truy xuất với thời gian từ 1-12 giờ.
+Instant Retrieval: Dành cho dữ liệu cần truy cập ngay lập tức, phù hợp cho truy cập thường xuyên.
+Expedited Retrieval: Tối ưu cho các trường hợp cần truy xuất khẩn cấp, thời gian từ 5-15 phút.
+Deep Archive: Lưu trữ lâu dài với chi phí thấp, nhưng thời gian truy xuất thường là vài giờ.
+```
 
 
