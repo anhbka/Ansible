@@ -1,8 +1,5 @@
 ### - *Một số ghi chú và template ansible trong quá trình tìm hiểu*
 
-
-
-
 ```
 - hosts: servertest 
   remote_user: root

@@ -1,6 +1,7 @@
 ### 1. Create repo offline with DVD for Centos 7:
 
 - Mount the CD/DVD ROM on any directory of your wish.
+
 ```
 mount -o loop /dev/sr0 /mnt
 
@@ -17,6 +18,41 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 EOF
 yum clean all
 yum repolist
+```
+
+```
+https://mirrors.bkns.vn/centos/7.9.2009/
+https://mirror.nsc.liu.se/centos-store/centos/7.9.2009/
+http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/
+https://mirror.cs.princeton.edu/pub/mirrors/centos/7.9.2009/
+http://mirrors.viettelidc.com.vn/centos/7/
+https://vault.centos.org/7.9.2009/isos/x86_64/
+
+cat <<\EOF > /etc/yum.repos.d/CentOS-Base.repo
+[base]
+name=CentOS-$releasever - Base
+baseurl=http://vault.centos.org/7.9.2009/os/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+[updates]
+name=CentOS-$releasever - Updates
+baseurl=http://vault.centos.org/7.9.2009/updates/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+[extras]
+name=CentOS-$releasever - Extras
+baseurl=http://vault.centos.org/7.9.2009/extras/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+[centosplus]
+name=CentOS-$releasever - Plus
+baseurl=http://vault.centos.org/7.9.2009/centosplus/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 ```
 
 ### 2. Create repo offline with DVD for Rhel 7
@@ -137,44 +173,4 @@ sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo
 yum clean all
 
 yum repolist
-
-https://mirrors.bkns.vn/centos/7.9.2009/
-https://mirror.nsc.liu.se/centos-store/centos/7.9.2009/
-http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/
-https://mirror.cs.princeton.edu/pub/mirrors/centos/7.9.2009/
-http://mirrors.viettelidc.com.vn/centos/7/
-
-cat <<\EOF > /etc/yum.repos.d/CentOS-Base.repo
-[base]
-name=CentOS-$releasever - Base
-baseurl=http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/os/$basearch/
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-
-[updates]
-name=CentOS-$releasever - Updates
-baseurl=http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/updates/$basearch/
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-
-[extras]
-name=CentOS-$releasever - Extras
-baseurl=http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/extras/$basearch/
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-
-[centosplus]
-name=CentOS-$releasever - Plus
-baseurl=http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/centosplus/$basearch/
-gpgcheck=1
-enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-
-[contrib]
-name=CentOS-$releasever - Contrib
-baseurl=http://hcm-mirrors.viettelidc.com.vn/centos/7.9.2009/contrib/$basearch/
-gpgcheck=1
-enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-EOF
 ```

@@ -1,1 +1,0 @@
-# Openstack_Heat.md
